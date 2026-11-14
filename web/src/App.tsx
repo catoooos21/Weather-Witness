@@ -69,9 +69,9 @@ export default function App() {
     <div className="app">
       <header className="masthead">
         <h1 onClick={() => set({ city: null })} role="link" tabIndex={0}>
-          Same City, Different Life
+          Weather Witness
         </h1>
-        <p className="tagline">Two lives in the same city, years apart. Told by NASA weather data.</p>
+        <p className="tagline">Two childhoods, one city. 45 years of NASA data take the stand.</p>
       </header>
 
       {!q.city ? <Home q={q} set={set} /> : <Result q={q} set={set} daily={daily} analysis={analysis} status={status} error={error} lens={lens} then={then} now={now} />}

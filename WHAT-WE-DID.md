@@ -1,6 +1,6 @@
 # What we did and how we did it
 
-*Same City, Different Life. NASA Space Apps Challenge 2026, 14–15 November. Challenge: "Be An Earth System Trend Detective!"*
+*Weather Witness (first called “Same City, Different Life”). NASA Space Apps Challenge 2026, 14–15 November. Challenge: "Be An Earth System Trend Detective!"*
 
 This file is the plain story of the project: what the app is, what we built, in what order, how it works, how to run it on any computer, and what to say about it. The technical reference (data checks, metric definitions, statistics) is in [README.md](README.md). The official challenge text is in [docs/challenge.md](docs/challenge.md).
 
@@ -34,6 +34,7 @@ All work happened on 13–14 November 2026.
 | 14 Nov, afternoon | Added **Choose your own**: a seventh choice under "Who are you?" where the visitor ticks which of the 17 measures the scrapbooks show, including the basics in °C and mm. The list is kept in the link. The challenge asks for a tool that lets people select variables; until now the lens chose for them. Sticky-note sentences are now built in one place (`web/src/notewords.ts`) so they read correctly in days, mm and °C. |
 | 14 Nov, evening | Added **average humidity** as a fifth basic (the value was downloaded for every city all along but only used indirectly, as sticky days), with changes worded in points. Added **The air: dust and haze**: how much the air dims the sun, from NASA CERES through NASA POWER, 2001–2025, as haze level, hazy or dusty days, very hazy days and crystal-clear days. Dust was the project's first idea; NASA POWER has no dust-only measure, so the section says plainly that it counts dust, smoke and pollution together. In a typical year Kuwait City has about 162 hazy days and Delhi about 230. The four demo cities have bundled copies (`scripts/fetch_demo_air.py`). |
 | 14 Nov, evening | **Simplified the city page** after reading the judging guide (usability counts under Validity, structure under Presentation). Eight fold-out sections became six: rain check, haze and ground merged into "More evidence from NASA"; the country card moved from between the scrapbooks and the folds into the last fold. Removed repeats: "Born 2040" on every sticky note (Two futures covers it), an extra rain sentence on the notes, and hot-day rows in "What it costs". The page is about a fifth shorter with the folds closed. Nothing was deleted from the code. |
+| 14 Nov, evening | Renamed the project **Weather Witness**: the data is the witness, and the stamp is its verdict. The line under the title is now "Two childhoods, one city. 45 years of NASA data take the stand." The repository and the live link keep the old name so the link does not change. |
 
 ## 3. How it works
 

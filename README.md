@@ -1,4 +1,6 @@
-# Same City, Different Life
+# Weather Witness
+
+*Two childhoods, one city. 45 years of NASA data take the stand. (First called “Same City, Different Life”; the repository and the live link keep that name.)*
 
 *NASA Space Apps Challenge 2026, 14–15 November. Challenge: “Be An Earth System Trend Detective!” (Advanced; Earth Science + Software). Official text in [docs/challenge.md](docs/challenge.md).*
 
