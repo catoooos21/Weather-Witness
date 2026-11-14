@@ -7,8 +7,8 @@ import { fmtNum, fmtP, fmtSigned } from '../format'
 import { CalendarChart, Sparkline, YearChart } from './YearChart'
 import { FUTURE_BIRTH_YEAR } from '../config/context'
 import { CHILDHOOD_LENGTH, YEARS } from '../config/metrics'
-import { clampValue, rateDigits, unitLong, unitShort, valueDigits } from '../units'
-import { futureWords, hasGap, noteLine } from '../notewords'
+import { clampValue, rateDigits, rateUnit, unitLong, valueDigits } from '../units'
+import { hasGap, noteLine } from '../notewords'
 
 export interface PageLabels {
   then: { born: string; years: string }
@@ -61,7 +61,6 @@ function Note({ r, lm }: { r: MetricResult; lm: LensMetric }) {
     if (!t.significant) trendWords = 'Up some years, down others, since 1981.'
     else trendWords = t.direction === 'up' ? 'Going up steadily since 1981.' : 'Going down steadily since 1981.'
   }
-  const future = projectFuture(r)
   // The sentence compares the two lives; the stamp judges all 45 years. Say so, and say it when they disagree.
   let mismatch = ''
   if (t && diff !== null) {
@@ -80,12 +79,6 @@ function Note({ r, lm }: { r: MetricResult; lm: LensMetric }) {
       <Sparkline r={r} />
       {trendWords && <p className="trendwords">{trendWords}</p>}
       {mismatch && <p className="mismatch">{mismatch}</p>}
-      {t?.significant && r.def.lessCertain && <p className="mismatch">Rain is the least certain part of this data, so treat this one with care.</p>}
-      {future !== null && (
-        <p className="future">
-          Born {FUTURE_BIRTH_YEAR}, if it keeps going: about <strong>{futureWords(r.def, future)}</strong>.
-        </p>
-      )}
     </div>
   )
 }
@@ -193,7 +186,7 @@ export function TrendSentence({ r }: { r: MetricResult }) {
   const [lo, hi] = r.ciPerDecade!
   const dir = s > 0 ? 'up' : 'down'
   const n = Math.abs(s)
-  const unit = unitShort(r.def)
+  const unit = rateUnit(r.def)
   // temperature moves in tenths of a degree per decade, so it gets one more decimal than counts of days
   const dp = r.def.unit === '°C' ? 2 : 1
   return (

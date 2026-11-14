@@ -16,7 +16,8 @@ import './cost.css'
  * come from NASA data with the page's trend test; the money figures are published studies.
  */
 export function Cost({ city, a, d }: { city: City; a: CityAnalysis; d: DailySeries }) {
-  const rows = useMemo(() => costRows(d, a), [d, a])
+  // the hot-day counts that costRows also returns are already in the scrapbooks and the case file, so only the two energy rows are listed here
+  const rows = useMemo(() => costRows(d, a).filter((r) => r.result.def.id === COOLING.id || r.result.def.id === HEATING.id), [d, a])
   const [open, setOpen] = useState<string | null>(null)
   const cooling = rows.find((r) => r.result.def.id === COOLING.id)?.result
   const pct = cooling ? percentChange(cooling) : null
@@ -89,7 +90,7 @@ export function Cost({ city, a, d }: { city: City; a: CityAnalysis; d: DailySeri
               )
             })}
           </ol>
-          <p className="hint">Tap any row to see every year since {YEARS.first}.</p>
+          <p className="hint">Tap any row to see every year since {YEARS.first}. Days too hot to work outside are in the scrapbooks and the case file.</p>
         </div>
       )}
 

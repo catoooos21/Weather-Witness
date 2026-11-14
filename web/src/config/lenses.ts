@@ -117,6 +117,7 @@ export const CUSTOM_WORDS: Record<string, Omit<LensMetric, 'metric'>> = {
   mean_tmax: { title: 'Average daytime high', phrase: '°C in the daytime highs', moreIsBad: true },
   mean_tmin: { title: 'Average night-time low', phrase: '°C in the night-time lows', moreIsBad: true },
   rain_total: { title: 'Rain in the year', phrase: 'mm rain over the year', moreIsBad: false },
+  mean_humidity: { title: 'Average humidity', phrase: '% humid on average', moreIsBad: true },
   hot_days: { title: 'Unusually hot days', phrase: 'unusually hot days', moreIsBad: true },
   very_hot_days: { title: 'Very hot days (35 °C+)', phrase: 'very hot days', moreIsBad: true },
   hot_nights: { title: 'Unusually warm nights', phrase: 'unusually warm nights', moreIsBad: true },

@@ -32,6 +32,8 @@ All work happened on 13–14 November 2026.
 | 14 Nov, afternoon | Added **the basics** to the case file and the city comparison: average temperature, average daytime high, average night-time low (°C) and rain in the year (mm), with the same charts and trend test. The challenge names temperature and rainfall first, and until now the app only showed counts of days built from them. Units are worded in one place (`web/src/units.ts`); temperature charts do not start at zero. We also confirmed NASA POWER serves GPM IMERG satellite rain from 1998 (UTC days only), not used yet. |
 | 14 Nov, afternoon | Added **A second opinion on rain**: NASA's GPM IMERG satellite rain next to the MERRA-2 model rain, both from NASA POWER, for five rain measures over 1998–2025 with the same trend test. It reports direction and amount separately, and says so when the 45-year stamp on the page is not seen in the satellite years. In Kuwait City the two agree on direction but the satellite counts 25 rainy days a typical year and the model 10. The four demo cities have bundled copies (`scripts/fetch_demo_rain.py`). |
 | 14 Nov, afternoon | Added **Choose your own**: a seventh choice under "Who are you?" where the visitor ticks which of the 17 measures the scrapbooks show, including the basics in °C and mm. The list is kept in the link. The challenge asks for a tool that lets people select variables; until now the lens chose for them. Sticky-note sentences are now built in one place (`web/src/notewords.ts`) so they read correctly in days, mm and °C. |
+| 14 Nov, evening | Added **average humidity** as a fifth basic (the value was downloaded for every city all along but only used indirectly, as sticky days), with changes worded in points. Added **The air: dust and haze**: how much the air dims the sun, from NASA CERES through NASA POWER, 2001–2025, as haze level, hazy or dusty days, very hazy days and crystal-clear days. Dust was the project's first idea; NASA POWER has no dust-only measure, so the section says plainly that it counts dust, smoke and pollution together. In a typical year Kuwait City has about 162 hazy days and Delhi about 230. The four demo cities have bundled copies (`scripts/fetch_demo_air.py`). |
+| 14 Nov, evening | **Simplified the city page** after reading the judging guide (usability counts under Validity, structure under Presentation). Eight fold-out sections became six: rain check, haze and ground merged into "More evidence from NASA"; the country card moved from between the scrapbooks and the folds into the last fold. Removed repeats: "Born 2040" on every sticky note (Two futures covers it), an extra rain sentence on the notes, and hot-day rows in "What it costs". The page is about a fifth shorter with the folds closed. Nothing was deleted from the code. |
 
 ## 3. How it works
 
@@ -46,17 +48,24 @@ All work happened on 13–14 November 2026.
 - For each year 1981–2025 we count things people feel: hot days, hot nights, heatwave days, frost days, rainy days, heavy-rain days, the biggest downpour, the longest dry spell, sticky days, perfect outdoor days, training days. "Hot" means hot **for this city**: above the 90th percentile of 1981–2010, so Kuwait and London each get their own bar.
 - "Then" and "Now" are the average over each ten-year period. The sticky note shows the difference.
 - The stamp comes from a **Mann-Kendall trend test** (with the Hamed–Rao correction for years that are like their neighbours) on the full 45-year series, with **Sen's slope** for the size of the trend. **Real change** = p < 0.05. **No clear change** = the years jump around with no steady direction.
-- The JavaScript statistics were checked against the Python packages `pymannkendall` and `scipy` on the same series. 90 automated tests pass (`npm test` in `web/`).
+- The JavaScript statistics were checked against the Python packages `pymannkendall` and `scipy` on the same series. 123 automated tests pass (`npm test` in `web/`).
 - "Born 2040, if it keeps going" is the trend line stretched to the years 2040–2049. It is labelled as a what-if, not a forecast, and only appears where the change is real.
 
 ### The page, top to bottom
-1. Controls: city, Two childhoods / Any two periods, birth years or periods, who you are.
-2. Two scrapbook pages (Then, Now) with sticky notes in the middle. Tap any number to open the 45-year chart with the trend line.
-3. Outdoor calendar: perfect days per month, then vs now.
-4. "X is warming about N times faster than the world" plus the pace line.
-5. "Why might this be?": global reasons, country eras, life choices, sources. This is history and research written by us; the page says the data cannot prove causes.
-6. "How do we know?": six plain sentences, then "Details for the curious" with everything a judge might ask.
-7. Copy link. Every state is in the URL, so any result can be shared.
+1. Controls: city, Two childhoods / Any two periods, birth years or periods, who you are (six ready-made lives, or "Choose your own" measures).
+2. The headline: the one clearest change for this life.
+3. Two scrapbook pages (Then, Now) with sticky notes in the middle, each saying "then vs now" and, separately, what all 45 years show. Tap any number to open the 45-year chart with the trend line.
+4. Outdoor calendar: perfect days per month, then vs now.
+5. "X is warming about N times faster than the world" plus the pace line.
+6. "Dig deeper", six sections that start folded:
+   - **Two futures**: a what-if for someone born in 2030, 2040 or 2050.
+   - **The case file**: every measure, the basics first, then grouped by kind of evidence.
+   - **Same question, another city**: a second city side by side.
+   - **More evidence from NASA**: pick one of three: a satellite check on the rain, dust and haze, the ground.
+   - **What it costs**: cooling and heating need, plus published money figures.
+   - **Why, and what the country is doing**: the main reason, what the numbers cannot see, and the country card.
+7. "How do we know?": plain sentences, then "Details for the curious" with everything a judge might ask.
+8. Copy link. Every state is in the URL, so any result can be shared.
 
 ## 4. Where things live
 
@@ -95,7 +104,7 @@ Open the address it prints (usually http://localhost:5173). Other commands, all 
 
 | Command | What it does |
 |---|---|
-| `npm test` | runs the 90 tests |
+| `npm test` | runs the 123 tests |
 | `npm run typecheck` | TypeScript check |
 | `npm run build` | production build into `web/dist/` |
 

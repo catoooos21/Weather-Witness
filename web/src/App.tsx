@@ -7,9 +7,8 @@ import { DEMO_CITIES, loadDaily, type DailySeries, type LoadStatus } from './pow
 import { DEFAULT_QUERY, parseHash, periods, toHash, type City, type Query } from './state'
 import { CaseFile } from './components/CaseFile'
 import { Compare } from './components/Compare'
-import { SecondOpinion } from './components/SecondOpinion'
+import { MoreEvidence } from './components/MoreEvidence'
 import { CountryStanding } from './components/CountryStanding'
-import { Land } from './components/Land'
 import { Headline } from './components/Headline'
 import { Cost } from './components/Cost'
 import { FutureBook } from './components/Future'
@@ -269,7 +268,6 @@ function Result(props: {
           <Headline a={analysis} lens={lens} />
           <Scrapbook a={analysis} lens={lens} labels={labels} />
           <GlobalContext a={analysis} cityName={city.name} />
-          <CountryStanding city={city} />
           <p className="foldbar">
             <span>Dig deeper:</span>
             <button
@@ -290,23 +288,23 @@ function Result(props: {
           <Fold title="Two futures" teaser="What someone born in 2040 could live through, two ways.">
             <FutureBook a={analysis} lens={lens} />
           </Fold>
-          <Fold title="What it costs" teaser="Electricity, lost work and damage: the money side of the heat.">
-            <Cost city={city} a={analysis} d={daily} />
-          </Fold>
           <Fold title="The case file" teaser={`Everything we checked in ${city.name}, grouped by kind of evidence.`}>
             <CaseFile a={analysis} cityName={city.name} />
           </Fold>
           <Fold title="Same question, another city" teaser={`Put a second city next to ${city.name}.`} open={!!q.vs}>
             <Compare a={analysis} city={city} then={then} now={now} vs={q.vs} onVs={(vs) => set({ vs })} />
           </Fold>
-          <Fold title="A second opinion on rain" teaser="NASA's rain satellites against the weather model, 1998–2025." lazy>
-            <SecondOpinion city={city} a={analysis} />
+          <Fold title="More evidence from NASA" teaser="A satellite check on the rain, dust and haze, and the ground under the city." lazy>
+            <MoreEvidence city={city} a={analysis} />
           </Fold>
-          <Fold title="The ground under the city" teaser="Not only the air: ground heat, soil wetness and evaporation." lazy>
-            <Land city={city} a={analysis} />
+          <Fold title="What it costs" teaser="Electricity for cooling and heating: the money side of the heat.">
+            <Cost city={city} a={analysis} d={daily} />
           </Fold>
-          <Fold title="Why might this be?" teaser="The main reason, and what these numbers cannot see.">
-            <WhyPanel country={city.country} cityName={city.name} then={then} now={now} />
+          <Fold title="Why, and what the country is doing" teaser="The main reason, what these numbers cannot see, and where the country stands.">
+            <section className="whywrap">
+              <WhyPanel country={city.country} cityName={city.name} then={then} now={now} />
+              <CountryStanding city={city} />
+            </section>
           </Fold>
           <Methods a={analysis} d={daily} lens={lens} cityName={city.name} />
           <p className="share">

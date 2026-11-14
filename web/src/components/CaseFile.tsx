@@ -3,7 +3,7 @@ import type { CityAnalysis, MetricResult } from '../metrics'
 import { basicMetrics, callOf, caseMetrics, groupCases } from '../casefile'
 import { YEARS } from '../config/metrics'
 import { fmtNum } from '../format'
-import { rateDigits, unitShort, valueDigits } from '../units'
+import { rateDigits, rateUnit, unitShort, valueDigits } from '../units'
 import { Sparkline, YearChart } from './YearChart'
 import { TrendSentence, Verdict } from './Scrapbook'
 
@@ -12,7 +12,7 @@ export function changeWords(r: MetricResult): string {
   if (call === 'none' || call === null) return 'No steady direction'
   const n = Math.abs(r.slopePerDecade!)
   const shown = n.toFixed(rateDigits(r.def, n))
-  return `${call === 'up' ? 'Up' : 'Down'} about ${shown} ${unitShort(r.def, +shown)} every ten years`
+  return `${call === 'up' ? 'Up' : 'Down'} about ${shown} ${rateUnit(r.def, shown)} every ten years`
 }
 
 function CaseRow({ r, a, open, onToggle, levels }: { r: MetricResult; a: CityAnalysis; open: boolean; onToggle: () => void; levels?: boolean }) {

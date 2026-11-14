@@ -38,6 +38,14 @@ describe('sticky-note sentences', () => {
     expect(noteLine(r, words('rain_total'), 0.1)).toBe('About the same rain in the year.')
   })
 
+  it('words humidity in points', () => {
+    const h = METRIC_BY_ID.mean_humidity
+    expect(noteLine(h, words('mean_humidity'), -2.54)).toBe('2.5 points less humid on average.')
+    expect(noteLine(h, words('mean_humidity'), 1.2)).toBe('1.2 points more humid on average.')
+    expect(noteLine(h, words('mean_humidity'), 0.3)).toBe('About the same average humidity.')
+    expect(futureWords(h, 41.46)).toBe('41.5 %')
+  })
+
   it('calls a gap at half a day or half a millimetre, but at a twentieth of a degree', () => {
     expect(hasGap(METRIC_BY_ID.hot_days, 0.4)).toBe(false)
     expect(hasGap(METRIC_BY_ID.hot_days, 0.5)).toBe(true)

@@ -1,0 +1,10 @@
+/* The air: dust and haze. A dusty-sky tint, so it reads as its own kind of evidence. */
+.casefile.air { background: #f6efe2; }
+.casefile.air .caselist li { background: #fdfaf3; border-color: #dccfb3; }
+.airsum { font-size: 1.05rem; margin-top: 0.9rem !important; }
+.casefile.air .fadenote { margin-top: 0.8rem !important; }
+.hazescale { display: flex; flex-wrap: wrap; gap: 0.3rem 0.5rem; margin: 0.6rem 0 0 !important; font-size: 0.8rem; font-weight: 700; }
+.hazescale .hs { padding: 0.1rem 0.55rem; border-radius: 999px; border: 1.5px solid #c9b995; white-space: nowrap; }
+.hazescale .hs.clear { background: #eef6fb; color: #1f3d5c; }
+.hazescale .hs.hazy { background: #f3e2bf; color: #5a4632; }
+.hazescale .hs.very { background: #d9b98a; color: #3a2a17; }

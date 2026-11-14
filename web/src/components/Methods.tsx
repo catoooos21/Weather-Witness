@@ -62,8 +62,8 @@ export function Methods({ a, d, lens, cityName }: { a: CityAnalysis; d: DailySer
             <strong>No clear change</strong> means some years go up, some go down, and 45 years show no steady direction.
           </li>
           <li>
-            <strong>Born {FUTURE_BIRTH_YEAR}, if it keeps going</strong> stretches the straight trend line into the future. It is a “what if”, not a forecast, and only appears where the
-            change is real.
+            <strong>Two futures</strong> stretches the straight trend line to someone born in {FUTURE_BIRTH_YEAR}. It is a “what if”, not a forecast, and only appears where the change
+            is real.
           </li>
           <li>
             <strong>Keep in mind:</strong> this is NASA’s weather model, not a thermometer in your street. Heat is very reliable, rain less so.
@@ -131,6 +131,9 @@ export function Methods({ a, d, lens, cityName }: { a: CityAnalysis; d: DailySer
             </li>
             <li>
               NASA GPM IMERG satellite precipitation, through NASA POWER (UTC days, from 1998). Used only in “A second opinion on rain”, next to MERRA-2 rain for the same days.
+            </li>
+            <li>
+              NASA CERES (SYN1deg) aerosol optical depth at 550 nm, through NASA POWER (from 2001). Used only in “The air: dust and haze”. It counts dust, smoke and pollution together.
             </li>
             <li>
               NASA GISS Surface Temperature Analysis (GISTEMP v4), global annual means. <a href="https://data.giss.nasa.gov/gistemp/">data.giss.nasa.gov/gistemp</a>.

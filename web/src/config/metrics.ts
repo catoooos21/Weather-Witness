@@ -72,7 +72,7 @@ export interface MetricDef {
   /** One short everyday-words line for the simple panel. */
   plain?: string
   /** Unit of the annual value. */
-  unit: 'days' | 'mm' | '°C'
+  unit: 'days' | 'mm' | '°C' | '%'
   /** What the yearly number means on a tile, when "days a year" or the bare unit is not enough. */
   unitLong?: string
   /**
@@ -144,6 +144,17 @@ export const METRICS: MetricDef[] = [
     definition: 'Total precipitation of the calendar year, in mm (ETCCDI PRCPTOT counts wet days only; this counts every day). When a few days are missing the total is scaled to a full year.',
     etccdi: 'PRCPTOT (variant)',
     compute: { kind: 'sum', value: (d) => d.PRECTOTCORR },
+  },
+  {
+    id: 'mean_humidity',
+    name: 'Average humidity',
+    plain: 'How full of moisture the air is: 0 % is bone dry, 100 % cannot hold any more.',
+    unit: '%',
+    unitLong: '%, yearly average',
+    basic: true,
+    needs: ['RH2M'],
+    definition: 'Annual mean of the daily mean relative humidity at 2 m, in %. Relative humidity depends on temperature as well as on moisture: the same amount of water in warmer air gives a lower percentage. “Sticky days” below uses dew point, which does not have that effect.',
+    compute: { kind: 'mean', value: (d) => d.RH2M },
   },
   {
     id: 'hot_days',

@@ -61,6 +61,13 @@ years (1998–2025) and the same trend test. Checked on 2026-11-14: the paramete
 `time-standard=utc`, it starts on 1998-01-01, and CORS is open ([web/src/rain.ts](web/src/rain.ts) records this).
 MERRA-2 rain is requested again in UTC for this section, so both sources count the same days.
 
+**NASA CERES aerosol optical depth** (`AOD_55`, from CERES SYN1deg, also through NASA POWER) gives “The air: dust and
+haze”: how much the air dims the sun, 2001–2025, with the same trend test. Checked on 2026-11-14: it starts on
+2001-01-01, it is served in local solar time, and NASA POWER has no dust-only parameter (`DUSMASS`, `DUCMASS`,
+`DUEXTTAU`, `TOTEXTTAU` and `PM25` are rejected), so the section says it counts dust, smoke and pollution together
+([web/src/air.ts](web/src/air.ts) records this). The scale (below 0.1 crystal clear, 1 very hazy) is NASA Earth
+Observatory’s; the 0.5 line for a “hazy day” is ours.
+
 **City search**: GeoNames cities with population > 100,000 (6,266 cities; name, country, lat, lon), CC BY 4.0.
 
 ## Metrics (all thresholds live in one file)
@@ -87,6 +94,7 @@ Local thresholds use each city’s own 1981–2010 baseline, so “hot” means 
 | Average daytime high | yearly mean of the daily maximum, °C (basic) | |
 | Average night-time low | yearly mean of the daily minimum, °C (basic) | |
 | Rain in the year | total precipitation of the calendar year, mm (basic) | PRCPTOT (variant) |
+| Average humidity | yearly mean of the daily mean relative humidity, % (basic); a change is given in points | |
 
 “Perfect outdoor days” follows the “outdoor days” idea of Choi, Y.-W., Khalifa, M. and Eltahir, E. A. B.
 (2024), *North–South disparity in impact of climate change on “outdoor days”*, Journal of Climate,
@@ -107,7 +115,7 @@ Defined in [web/src/config/lenses.ts](web/src/config/lenses.ts). Adding a lens i
 | Runner / athlete | good training days, hot days, sticky days, calendar |
 | Older person | hot nights, tropical nights, heatwave days, very hot days |
 | Traveller / event planner | perfect outdoor days, rainy days, very hot days, outdoor calendar |
-| Choose your own | any of the 17 measures, ticked by the visitor (including the four basics); the list is kept in the link as `pick=` |
+| Choose your own | any of the 18 measures, ticked by the visitor (including the five basics); the list is kept in the link as `pick=` |
 
 Modes: **Two childhoods** (birth year b → years b to b+9; birth years 1981–2016) and **Any two periods**
 (default 1981–1990 vs 2016–2025).
@@ -131,7 +139,7 @@ and the real Kuwait hot-days series). The Python reference lives in [pipeline/st
 regenerate the fixtures with `python -m pipeline.tests.make_js_fixtures`.
 
 ```bash
-cd web && npm test            # 90 tests: statistics vs Python, calendar, metrics engine, missing-day rule, the basics, case file, two cities, two futures, satellite rain, choose your own
+cd web && npm test            # 123 tests: statistics vs Python, calendar, metrics engine, missing-day rule, the basics, case file, two cities, two futures, satellite rain, choose your own, land, cost, headline, emissions, haze
 python -m pytest pipeline/tests   # Python reference tests
 ```
 

@@ -202,6 +202,13 @@ select:hover, input[type='search']:hover, input[type='number']:hover { border-co
 .fold > .casefile { background: var(--paper-then); }
 .fold .futurehead h3, .fold > .casefile > h3, .fold > .compare > h3, .fold > .why > h3 { display: none; }
 .fold > .foldwait { border: none; padding: 0; }
+/* sections grouped inside one fold */
+.moreevidence, .whywrap { padding: 0.9rem 1.2rem 1.2rem; }
+.moreevidence > p { margin: 0 0 0.4rem; }
+.moreevidence > .modes { margin-bottom: 0.2rem; }
+.moreevidence > section, .whywrap > section, .whywrap > div { margin-top: 0.9rem; }
+/* the rain section says once, at its top, that rain is the least certain data; no flag on each of its stamps */
+.opinion .rainflag { display: none; }
 .fold .futurebook { border-top: 1px dashed #c9b995; }
 
 /* ---------- two cities ---------- */

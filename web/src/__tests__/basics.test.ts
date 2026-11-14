@@ -6,7 +6,7 @@ import { analyse, calendar, childhood } from '../metrics'
 import { daysBetween, type DailySeries } from '../power'
 import { basicMetrics, caseMetrics } from '../casefile'
 import { whatIf } from '../future'
-import { axisFromZero, clampValue, rateDigits, unitLong, unitShort } from '../units'
+import { axisFromZero, clampValue, rateDigits, rateUnit, unitLong, unitShort } from '../units'
 
 function loadDemo(id: string): DailySeries {
   const j = JSON.parse(readFileSync(resolve(__dirname, `../../public/demo/${id}.json`), 'utf-8'))
@@ -63,12 +63,41 @@ describe('the basics: plain temperature and rain', () => {
   })
 
   it('are listed as basics, in order, and stay out of the counted-days cases', () => {
-    expect(basicMetrics(a).map((r) => r.def.id)).toEqual(['mean_temp', 'mean_tmax', 'mean_tmin', 'rain_total'])
+    expect(basicMetrics(a).map((r) => r.def.id)).toEqual(['mean_temp', 'mean_tmax', 'mean_tmin', 'rain_total', 'mean_humidity'])
     expect(caseMetrics(a).some((r) => r.def.basic)).toBe(false)
     expect(a.results.mean_temp.trend!.significant).toBe(true)
     expect(a.results.mean_temp.slopePerDecade!).toBeGreaterThan(0)
     // rain is flagged as the less certain kind of data
     expect(METRIC_BY_ID.rain_total.lessCertain).toBe(true)
+  })
+
+  it('yearly humidity is the average of the daily humidity, between 0 and 100', () => {
+    for (const year of [1981, 2000, 2024]) {
+      const h = yearValues(d, 'RH2M', year)
+      expect(at(a, 'mean_humidity', year)).toBeCloseTo(sum(h) / h.length, 2)
+    }
+    for (let y = YEARS.first; y <= YEARS.last; y++) {
+      expect(at(a, 'mean_humidity', y)).toBeGreaterThan(0)
+      expect(at(a, 'mean_humidity', y)).toBeLessThan(100)
+    }
+    expect(a.results.mean_humidity.trend).not.toBeNull()
+  })
+
+  it('words a percentage as a value in % and a change in points', () => {
+    const h = METRIC_BY_ID.mean_humidity
+    expect(unitShort(h)).toBe('%')
+    expect(rateUnit(h)).toBe('points')
+    expect(rateUnit(h, 1)).toBe('point')
+    expect(rateUnit(h, '1.0')).toBe('points')
+    expect(rateUnit(METRIC_BY_ID.hot_days, 1)).toBe('day')
+    // a number written with a decimal stays plural: "1.0 days"
+    expect(rateUnit(METRIC_BY_ID.hot_days, '1.0')).toBe('days')
+    expect(rateUnit(METRIC_BY_ID.mean_temp)).toBe('°C')
+    expect(unitLong(h)).toBe('%, yearly average')
+    expect(rateDigits(h, 0.4)).toBe(2)
+    expect(rateDigits(h, 1.6)).toBe(1)
+    expect(clampValue(h, 104)).toBe(100)
+    expect(clampValue(h, -3)).toBe(0)
   })
 
   it('words each unit properly', () => {

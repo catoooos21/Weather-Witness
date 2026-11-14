@@ -7,7 +7,7 @@ import type { MetricDef } from './config/metrics'
 /** The part of a lens metric the wording needs. */
 export interface NoteWords {
   title: string
-  /** Days: completes "N more/fewer ___, every year". mm and °C: starts with the unit, e.g. "mm in the biggest downpour", "°C on average". */
+  /** Days: completes "N more/fewer ___, every year". mm, °C and %: starts with the unit, e.g. "mm in the biggest downpour", "°C on average", "% humid on average". */
   phrase: string
 }
 
@@ -16,7 +16,7 @@ function singular(phrase: string): string {
   return phrase.replace(/\b(days|nights)\b/, (w) => w.slice(0, -1))
 }
 
-/** Smallest then-vs-now difference worth a sentence: half a day, half a millimetre, a twentieth of a degree. */
+/** Smallest then-vs-now difference worth a sentence: half a day, half a millimetre, half a point of humidity, a twentieth of a degree. */
 export function gapThreshold(def: MetricDef): number {
   return def.unit === '°C' ? 0.05 : 0.5
 }
@@ -36,14 +36,17 @@ export function noteLine(def: MetricDef, lm: NoteWords, diff: number | null): st
     return `${n} ${up ? 'more' : 'fewer'} ${n === 1 ? singular(lm.phrase) : lm.phrase}, every year.`
   }
   // "mm in the biggest downpour" -> "in the biggest downpour"; "°C on average" -> "on average"
-  const rest = lm.phrase.replace(/^(mm|°C)\s+/, '')
+  const rest = lm.phrase.replace(/^(mm|°C|%)\s+/, '')
   if (def.unit === 'mm') return `${Math.round(Math.abs(diff))} mm ${up ? 'more' : 'less'} ${rest}.`
+  // a percentage changes in points: 43 % to 40 % is 3 points, not 3 %
+  if (def.unit === '%') return `${Math.abs(diff).toFixed(1)} points ${up ? 'more' : 'less'} ${rest}.`
   return `${Math.abs(diff).toFixed(1)} °C ${up ? 'warmer' : 'cooler'} ${rest}.`
 }
 
-/** A projected yearly value in words: "87 a year", "12 mm", "11.4 °C". */
+/** A projected yearly value in words: "87 a year", "12 mm", "41.5 %", "11.4 °C". */
 export function futureWords(def: MetricDef, v: number): string {
   if (def.unit === 'days') return `${Math.round(v)} a year`
   if (def.unit === 'mm') return `${Math.round(v)} mm`
+  if (def.unit === '%') return `${v.toFixed(1)} %`
   return `${v.toFixed(1)} °C`
 }
