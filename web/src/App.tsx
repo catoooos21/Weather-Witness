@@ -10,6 +10,7 @@ import { Compare } from './components/Compare'
 import { MoreEvidence } from './components/MoreEvidence'
 import { CountryStanding } from './components/CountryStanding'
 import { Headline } from './components/Headline'
+import { RawData } from './components/RawData'
 import { Cost } from './components/Cost'
 import { FutureBook } from './components/Future'
 import { CitySearch } from './components/CitySearch'
@@ -265,6 +266,7 @@ function Result(props: {
       )}
       {analysis && daily && (
         <>
+          <RawData d={daily} />
           <Headline a={analysis} lens={lens} />
           <Scrapbook a={analysis} lens={lens} labels={labels} />
           <GlobalContext a={analysis} cityName={city.name} />
