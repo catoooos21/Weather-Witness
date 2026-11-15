@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { PARAMS, YEARS, type Param } from '../config/metrics'
 import { daysBetween, type DailySeries } from '../power'
 import './rawdata.css'
@@ -24,6 +24,7 @@ export function hottestRecentDay(d: DailySeries): { index: number; date: Date } 
  */
 export function RawData({ d }: { d: DailySeries }) {
   const day = useMemo(() => hottestRecentDay(d), [d])
+  const [open, setOpen] = useState(false)
   if (!day) return null
   const ymd = day.date.toISOString().slice(0, 10).replace(/-/g, '')
   const pairs: [string, string][] = [
@@ -32,19 +33,29 @@ export function RawData({ d }: { d: DailySeries }) {
   ]
   const human = day.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
   return (
-    <section className="rawdata" aria-label="What NASA sends us">
-      <p className="rawlabel">What NASA sends us</p>
-      <code className="rawcode">
-        {pairs.map(([k, v], i) => (
-          <span key={k} className="rawpair">
-            <span className="rawkey">"{k}"</span>: <span className="rawval">{v}</span>
-            {i < pairs.length - 1 ? ', ' : ''}
-          </span>
-        ))}
-      </code>
-      <p className="rawnote">
-        One real day for this spot: {human}, the hottest of {YEARS.last}. NASA has {d.n.toLocaleString('en-US')} days like this. Below, we turn them into two lives.
-      </p>
+    <section className={`rawdata ${open ? 'open' : ''}`}>
+      <button type="button" className="rawbtn" aria-expanded={open} aria-controls="rawdata-body" onClick={() => setOpen(!open)}>
+        <span className="rawarrow" aria-hidden="true">
+          {open ? '▾' : '▸'}
+        </span>{' '}
+        What NASA sends us
+      </button>
+      {open && (
+        <div id="rawdata-body" className="rawbody">
+          <code className="rawcode">
+            {pairs.map(([k, v], i) => (
+              <span key={k} className="rawpair">
+                <span className="rawkey">"{k}"</span>: <span className="rawval">{v}</span>
+                {i < pairs.length - 1 ? ', ' : ''}
+              </span>
+            ))}
+          </code>
+          <p className="rawnote">
+            One real day for this spot: {human}, the hottest of {YEARS.last}. NASA has {d.n.toLocaleString('en-US')} days like this. Below, we turn them into two
+            lives.
+          </p>
+        </div>
+      )}
     </section>
   )
 }

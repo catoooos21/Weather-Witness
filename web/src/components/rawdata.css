@@ -1,18 +1,33 @@
 .rawdata {
   max-width: 900px;
   margin: 0.4rem auto 1.1rem;
+  text-align: center;
+}
+.rawbtn {
+  border: 2px solid var(--ink);
+  background: #fffdf7;
+  color: var(--ink);
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
+}
+.rawbtn:hover { background: var(--note); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); }
+.rawbtn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
+.rawdata.open .rawbtn { background: var(--ink); color: #fff; }
+.rawarrow { display: inline-block; width: 1em; }
+.rawbody {
+  margin-top: 0.7rem;
   padding: 0.8rem 1.1rem 0.75rem;
   background: #fffdf7;
   border: 2px dashed #c9b995;
   border-radius: 10px;
-}
-.rawlabel {
-  margin: 0 0 0.35rem;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
+  text-align: left;
 }
 .rawcode {
   display: block;
