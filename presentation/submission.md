@@ -18,7 +18,7 @@ Weather Witness turns 45 years of NASA daily weather data into something anyone 
 
 ## Link to Project Demo
 
-[ public link to the 7-slide deck or the 30-second video: see the note at the end ]
+https://catoooos21.github.io/Weather-Witness/presentation/
 
 ---
 

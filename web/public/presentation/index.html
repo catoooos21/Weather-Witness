@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weather Witness: the presentation (NASA Space Apps 2026)</title>
+<meta name="description" content="Weather Witness, NASA Space Apps Challenge 2026: the 7-slide presentation with its opening video.">
+<style>
+  :root { --bg: #1B1410; --ink: #F6F1E7; --muted: #B8B0A4; --yellow: #FFD65C; --green: #2F7D4F; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
+    font-family: Calibri, Carlito, "Segoe UI", system-ui, -apple-system, sans-serif; }
+  .app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 18px; font-size: 14px; color: var(--muted); }
+  .top strong { color: var(--yellow); letter-spacing: .04em; }
+  .top a { color: var(--ink); }
+  .stage { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 0 12px; }
+  .frame { position: relative; aspect-ratio: 16 / 9; width: min(100%, calc((100dvh - 120px) * 16 / 9)); background: #000;
+    border-radius: 6px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+  .frame > * { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: none; }
+  .frame > .on { display: block; }
+  .zone { position: absolute; top: 0; bottom: 0; z-index: 2; cursor: pointer; display: block; background: transparent; border: 0; padding: 0; }
+  .zone.prev { left: 0; width: 30%; } .zone.next { right: 0; width: 70%; }
+  .frame.video .zone { display: none; }
+  .bar { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; flex-wrap: wrap; }
+  button.ctl, a.ctl { font: inherit; font-size: 15px; color: var(--ink); background: #2E241C; border: 1px solid #4a3d31;
+    border-radius: 999px; padding: 8px 16px; cursor: pointer; text-decoration: none; }
+  button.ctl:hover, a.ctl:hover { border-color: var(--yellow); }
+  button.ctl:focus-visible, a.ctl:focus-visible, .zone:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+  .count { min-width: 64px; text-align: center; font-variant-numeric: tabular-nums; }
+  .note { font-size: 13px; color: var(--muted); text-align: center; padding: 0 12px 10px; }
+  :fullscreen .top, :fullscreen .note { display: none; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="top">
+    <span><strong>WEATHER WITNESS</strong> &nbsp;·&nbsp; NASA Space Apps Challenge 2026 &nbsp;·&nbsp; Team “Is It Just Me or Is It Dusty?”</span>
+    <a href="../">Open the live site</a>
+  </div>
+  <div class="stage">
+    <div class="frame" id="frame" aria-live="polite">
+      <img src="slides/slide-1.jpg" alt="Slide 1. Weather Witness: two childhoods, one city. 45 years of NASA data take the stand. Team Is It Just Me or Is It Dusty?: Manayer Abouamer, Bashayer Abouamer, Kawthar Bawi, Ahmed Yehia, Mohammed Zarei.">
+      <video id="vid" controls playsinline preload="metadata" poster="slides/slide-2-poster.jpg"
+        aria-label="Slide 2. Opening video, 23 seconds: a parked car in summer, a lighter on the dashboard, then the cost of heat: 489,000 people killed by heat every year worldwide (WHO); 1,071 children lost their lives in hot cars in the United States since 1998 (noheatstroke.org); 1,301 people lost their lives during the Hajj in June 2024 (Saudi Ministry of Health); 57 more warm nights a year in Kuwait City (NASA POWER).">
+        <source src="slide-2-video.mp4" type="video/mp4">
+      </video>
+      <img src="slides/slide-3.jpg" alt="Slide 3. Kuwait City and London: two directions. Both cities are getting hotter; only one of the two countries is cutting its pollution.">
+      <img src="slides/slide-4.jpg" alt="Slide 4. It is not only the air: why it happens, and how the heat shows in the air, the land and the ocean.">
+      <img src="slides/slide-5.jpg" alt="Slide 5. What the heat costs: what happens when it is too hot to work.">
+      <img src="slides/slide-6.jpg" alt="Slide 6. We made the data speak: a QR code to the site, one day of raw NASA data as the API sends it, and the same data on our site as 57 more unusually warm nights a year, stamped Real change.">
+      <img src="slides/slide-7.jpg" alt="Slide 7. The verdict. Same city. Same age. A different childhood.">
+      <button class="zone prev" id="zprev" aria-label="Previous slide"></button>
+      <button class="zone next" id="znext" aria-label="Next slide"></button>
+    </div>
+  </div>
+  <div class="bar">
+    <button class="ctl" id="prev" aria-label="Previous slide">&#8592; Back</button>
+    <span class="count" id="count">1 / 7</span>
+    <button class="ctl" id="next" aria-label="Next slide">Next &#8594;</button>
+    <button class="ctl" id="fs">Full screen</button>
+    <a class="ctl" href="Weather-Witness-slides.pdf" download>PDF</a>
+  </div>
+  <div class="note">Use the arrow keys, or click the slide. Slide 2 is a 23-second video with sound: press play if it does not start.</div>
+</div>
+<script>
+(function () {
+  var frame = document.getElementById('frame');
+  var slides = Array.prototype.filter.call(frame.children, function (el) { return el.tagName === 'IMG' || el.tagName === 'VIDEO'; });
+  var vid = document.getElementById('vid');
+  var count = document.getElementById('count');
+  var i = 0;
+  function show(n, fromUser) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (el, k) { el.classList.toggle('on', k === i); });
+    var isVideo = slides[i] === vid;
+    frame.classList.toggle('video', isVideo);
+    if (isVideo) {
+      vid.currentTime = 0;
+      if (fromUser) { var p = vid.play(); if (p && p.catch) p.catch(function () {}); }
+    } else if (!vid.paused) { vid.pause(); }
+    count.textContent = (i + 1) + ' / ' + slides.length;
+    if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
+  }
+  function go(d) { show(i + d, true); }
+  document.getElementById('prev').onclick = function () { go(-1); };
+  document.getElementById('next').onclick = function () { go(1); };
+  document.getElementById('zprev').onclick = function () { go(-1); };
+  document.getElementById('znext').onclick = function () { go(1); };
+  document.getElementById('fs').onclick = function () {
+    var app = document.getElementById('app');
+    if (document.fullscreenElement) { document.exitFullscreen(); }
+    else if (app.requestFullscreen) { app.requestFullscreen().catch(function () {}); }
+  };
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || (e.key === ' ' && slides[i] !== vid)) { e.preventDefault(); go(1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+    else if (e.key === 'Home') { show(0, true); }
+    else if (e.key === 'End') { show(slides.length - 1, true); }
+    else if (e.key === 'f' || e.key === 'F') { document.getElementById('fs').click(); }
+  });
+  var x0 = null;
+  frame.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  frame.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+  });
+  slides.forEach(function (el) { if (el.tagName === 'IMG') { var im = new Image(); im.src = el.src; } });
+  var start = parseInt((location.hash || '').slice(1), 10);
+  show(isNaN(start) ? 0 : start - 1, false);
+})();
+</script>
+</body>
+</html>
