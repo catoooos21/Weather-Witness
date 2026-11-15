@@ -1,0 +1,10 @@
+# Kept off GitHub: these contain a news interview clip shown only in the live presentation.
+slide-video.mp4
+Weather-Witness.pptx
+Weather-Witness (new video).pptx
+previous-version/
+clips/
+stills/
+# Working files
+__pycache__/
+~$*
